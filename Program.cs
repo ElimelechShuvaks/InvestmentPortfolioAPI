@@ -1,6 +1,7 @@
 using InvestmentPortfolioAPI.Data;
 using InvestmentPortfolioAPI.Services;
 using Microsoft.EntityFrameworkCore;
+using YourNamespace.Services;
 
 namespace InvestmentPortfolioAPI
 {
@@ -19,12 +20,15 @@ namespace InvestmentPortfolioAPI
             // רישום HttpClient לשירותי DI
             builder.Services.AddHttpClient();
 
-            // רישום שירותי ה-API
+            // רישום שירותי ה-API הקיימים
             builder.Services.AddScoped<IStockService, StockService>();
             builder.Services.AddScoped<IHistoricalDataService, HistoricalDataService>();
             builder.Services.AddScoped<IMarketDataService, MarketDataService>();
             builder.Services.AddScoped<INewsService, NewsService>();
             builder.Services.AddScoped<ISearchService, SearchService>();
+
+            // רישום שירות ה-Imagga החדש
+            builder.Services.AddScoped<IImaggaService, ImaggaService>();
 
             // הוספת בקרי ה-API
             builder.Services.AddControllers();
@@ -48,7 +52,10 @@ namespace InvestmentPortfolioAPI
                 // הוספת קובץ תיעוד XML אם קיים
                 var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+                if (File.Exists(xmlPath))
+                {
+                    c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+                }
             });
 
             var app = builder.Build();
