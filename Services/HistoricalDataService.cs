@@ -9,17 +9,29 @@ using Newtonsoft.Json.Linq;
 
 namespace InvestmentPortfolioAPI.Services
 {
+    /// <summary>
+    /// Service responsible for fetching historical stock data from the AlphaVantage API.
+    /// </summary>
     public class HistoricalDataService : IHistoricalDataService
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HistoricalDataService"/> class.
+        /// </summary>
+        /// <param name="configuration">The application configuration for accessing API keys and other settings.</param>
         public HistoricalDataService(IConfiguration configuration)
         {
             _httpClient = new HttpClient();
             _apiKey = configuration["AlphaVantage:ApiKey"];
         }
 
+        /// <summary>
+        /// Retrieves historical stock data for the specified symbol.
+        /// </summary>
+        /// <param name="symbol">The stock symbol (e.g., AAPL, MSFT).</param>
+        /// <returns>A list of historical data points ordered by timestamp in descending order.</returns>
         public async Task<List<HistoricalDataPoint>> GetHistoricalDataAsync(string symbol)
         {
             var url = $"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={_apiKey}";
