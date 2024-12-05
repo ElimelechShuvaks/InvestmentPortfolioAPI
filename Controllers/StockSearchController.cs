@@ -59,12 +59,6 @@ namespace InvestmentPortfolioAPI.Controllers
             {
                 var stockInfo = await _stockService.GetStockInfoAsync(symbol);
 
-                //if (stockInfo == null)
-                //{
-                //    _logger.LogInformation("No stock information found for symbol: {Symbol}", symbol);
-                //    return NotFound($"Stock information not found for symbol: {symbol}");
-                //}
-
                 _logger.LogInformation("Successfully retrieved stock information for symbol: {Symbol}", symbol);
                 return Ok(stockInfo);
             }
